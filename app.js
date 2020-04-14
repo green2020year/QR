@@ -5,7 +5,6 @@ const http = require('http').createServer(app);
 const fs = require('fs');
 const parser = require('ua-parser-js');
 const email_validator = require("email-validator");
-const os = require('os');
 const uniqid = require('uniqid');
 const mailer = require('nodemailer-promise');
 const LineByLineReader = require('line-by-line');
@@ -71,12 +70,12 @@ const SPAhtml      = fs.readFileSync("public/SPA.html", 'utf-8');
 */
 // reading purpose database
 const ANKET_DATA_QUEUE_MAX_THRESHOLD = parseInt(fs.readFileSync(queue_threshold_file_location, 'utf-8').toString());
-const sp_domain_list = fs.readFileSync("../db/email_domain_db.txt", 'utf-8').toString().split(os.EOL);
-const introducers_db_lines_Array = fs.readFileSync("../db/introducers_db.txt", 'utf-8').toString().split(os.EOL);
-const emailTemplate = fs.readFileSync("../db/email_template.txt", 'utf-8').toString().split(os.EOL).join("<br />");
+const sp_domain_list = fs.readFileSync("../db/email_domain_db.txt", 'utf-8').toString().split("\r\n");
+const introducers_db_lines_Array = fs.readFileSync("../db/introducers_db.txt", 'utf-8').toString().split("\r\n");
+const emailTemplate = fs.readFileSync("../db/email_template.txt", 'utf-8').toString().split("\r\n").join("<br />");
 let employee_position = parseInt(fs.readFileSync(no_of_anket_users_file_location, 'utf-8').toString());
 // reading purpose database ⇒ email configurations
-const email_configuration_db_lines_Array = fs.readFileSync("../db/email_configuration_db.txt", 'utf-8').toString().split(os.EOL);
+const email_configuration_db_lines_Array = fs.readFileSync("../db/email_configuration_db.txt", 'utf-8').toString().split("\r\n");
 
 console.log("--------Loaded Into Memory Start----------");
 console.log("queue threshold value : " + ANKET_DATA_QUEUE_MAX_THRESHOLD);
@@ -402,7 +401,7 @@ function appendRecordToDisk(anket_file_location, record) {
   const stats = fs.statSync(anket_file_location);
   const fileSizeInBytes = stats["size"];
   if(fileSizeInBytes != 0) {
-    fs.appendFileSync(anket_file_location, os.EOL);
+    fs.appendFileSync(anket_file_location, "\r\n");
   }
   fs.appendFileSync(anket_file_location, record);
 }
