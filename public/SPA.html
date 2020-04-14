@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アンケート受け取る画面</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style>
+    nav{
+      height: 25px !important;
+      line-height: 25px !important;
+    }
+    .nav_footer{
+      height: 50px !important;
+      line-height: 50px !important;
+    }
+    .brand-logo{
+      font-size: 14px !important;
+    }
+    .clear-btn{
+      height: 20px !important;
+      line-height: 20px !important;
+    }
+    .btn01, .btn02 {
+      height: 40px;
+      line-height: 40px;
+    }
+    nav ul a.btn{
+      margin-top: -6px !important;
+    }
+    .card-content{
+      padding: 5px !important;
+    }
+    .card-title{
+      font-weight: bold !important;
+      font-size:10px !important;
+      line-height: 10px !important;
+    }
+    .input-field{
+      margin-top: -10px !important;
+    }
+    input[type="text"]{
+      height: 20px !important;
+    }
+    input{
+      font-size: 10px !important;
+      margin-bottom: -2px !important;
+    }
+    .error-msg{
+      color: red;
+      font-size: 8px;
+    }
+    [type="checkbox"]+span:not(.lever) {
+      padding-left: 22px !important;
+      font-size:15px !important;
+      color:black;
+    }
+    [type="radio"]:not(:checked)+span, [type="radio"]:checked+span {
+      padding-left: 22px !important;
+      font-size:15px !important;
+      color:black;
+    }
+    #position_container input[type='text']{
+      width: 100px;
+    }
+    .white-space-pre {
+      white-space: pre-wrap;
+    }    
+  </style>
+</head>
+<body>
+  <div id="SPA">
+    <div id="screen001" style="display: none;">
+      <input type="hidden" name="QR_NO" value="{QR_NO}"/>
+      <nav>
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <a href="#" class="brand-logo left">アンケート受け取る窓口</a>
+            <ul class="right">
+              <li><a href="#" class="clear-btn btn blue lighten-3 btn01">クリアする</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container" id="mail_address_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">スマートフォンのメールアドレスを入力してください</span>
+            <div>
+              <input type="text" placeholder="メールアドレス">
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="holiday_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの休日はいつですか</span>
+            <div>
+              <label><input type="checkbox" name="holiday[]" value="{holiday0}" /><span>{holiday0}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday1}" /><span>{holiday1}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday2}" /><span>{holiday2}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday3}" /><span>{holiday3}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday4}" /><span>{holiday4}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday5}" /><span>{holiday5}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday6}" /><span>{holiday6}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday7}" /><span>{holiday7}</span></label>
+              <label><input type="checkbox" name="holiday[]" value="{holiday8}" /><span>{holiday8}</span></label>
+              <br>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="score_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの平均スコアは</span>
+            <div>
+              <label><input type="radio" name="score" value="{score0}" class="with-gap" /><span>{score0}</span></label>
+              <label><input type="radio" name="score" value="{score1}" class="with-gap" /><span>{score1}</span></label>
+              <label><input type="radio" name="score" value="{score2}" class="with-gap" /><span>{score2}</span></label>
+              <label><input type="radio" name="score" value="{score3}" class="with-gap" /><span>{score3}</span></label>
+              <label><input type="radio" name="score" value="{score4}" class="with-gap" /><span>{score4}</span></label>
+              <label><input type="radio" name="score" value="{score5}" class="with-gap" /><span>{score5}</span></label>
+              <label><input type="radio" name="score" value="{score6}" class="with-gap" /><span>{score6}</span></label>
+              <label><input type="radio" name="score" value="{score7}" class="with-gap" /><span>{score7}</span></label>
+              <br>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="play_time_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">よくプレーする時間帯</span>
+            <div>
+              <label><input type="checkbox" name="play_time[]" value="{play_time0}" /><span>{play_time0}</span></label>
+              <label><input type="checkbox" name="play_time[]" value="{play_time1}" /><span>{play_time1}</span></label>
+              <label><input type="checkbox" name="play_time[]" value="{play_time2}" /><span>{play_time2}</span></label>
+              <br>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="participation_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">1人での参加もできますか？</span>
+            <div>
+              <label><input type="radio" name="participation" value="{participation0}" class="with-gap" /><span>{participation0}</span></label>
+              <label><input type="radio" name="participation" value="{participation1}" class="with-gap" /><span>{participation1}</span></label>
+              <br>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <div class="container" id="position_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの役職は</span>
+            <div>
+              <label><input type="radio" name="position" value="{position0}" class="with-gap" /><span>{position0}</span></label>
+              <label><input type="radio" name="position" value="{position1}" class="with-gap" /><span>{position1}</span></label>
+              <label><input type="radio" name="position" value="{position2}" class="with-gap" /><span>{position2}</span></label>
+              <br>
+              <label><input type="radio" name="position" value="{position3}" class="with-gap" /><span>{position3}</span></label>
+              <input type="text" placeholder="その他" disabled>
+              <br>
+              <span class="error-msg position"></span>
+              <span class="error-msg position_others"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="play_style_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">希望するプレースタイルは</span>
+            <div>
+              <label><input type="radio" name="play_style" value="{play_style0}" class="with-gap" /><span>{play_style0}</span></label>
+              <label><input type="radio" name="play_style" value="{play_style1}" class="with-gap" /><span>{play_style1}</span></label>
+              <label><input type="radio" name="play_style" value="{play_style2}" class="with-gap" /><span>{play_style2}</span></label>
+              <br>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="nav_footer server-error" style="display: none;">
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <marquee scrolldelay="50" direction="right" width="100%"></marquee>
+          </div>
+        </div>
+      </nav>
+      <br>
+      <nav class="nav_footer">
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <ul class="right">
+              <li><a href="#" class="btn blue lighten-3 btn02">確認画面へ</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div id="screen002" style="display: none;">
+      <nav>
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <a href="#" class="brand-logo center">アンケート受け取る窓口</a>
+          </div>
+        </div>
+      </nav>
+      <div class="container" id="mail_address_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">スマートフォンのメールアドレス:</span>
+            <div></div>
+            <span class="error-msg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="holiday_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの休日は:</span>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="score_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの平均スコアは</span>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="play_time_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">よくプレーする時間帯</span>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="participation_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">1人での参加もできますか？</span>
+            <div></div>
+          </div>
+        </div>
+      </div>  
+      <div class="container" id="position_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">あなたの役職は</span>
+            <div></div>
+          </div>
+        </div>
+      </div>  
+      <div class="container" id="play_style_container">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">希望するプレースタイルは</span>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <nav class="nav_footer server-error" style="display: none;">
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <marquee scrolldelay="50" direction="right" width="100%"></marquee>
+          </div>
+        </div>
+      </nav>
+      <br>
+      <nav class="nav_footer">
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <ul class="right">
+              <li><a href="#" class="btn blue lighten-3 btn01">入力画面へ</a></li>
+              <li><a href="#" class="btn blue lighten-3 btn02">確定</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div id="screen003" style="display: none;">
+      <nav>
+        <div class="nav-wrapper blue">
+          <div class="container">
+            <a href="#" class="brand-logo center">完了画面</a>
+          </div>
+        </div>
+      </nav>
+      <div class="container" id="complete_container">
+        <div class="card">
+          <div class="card-content">
+            <div class="white-space-pre">
+ご回答ありがとうございました！
+後ほどアンケート登録完了のメールを送ります。
+
+プレー時の登録完了メール提示でワンウェイオリジナルキャップをプレゼントいたします！（但し、ワンフレンドクラブでのプレーに限る）
+仮会員登録日：<span id="registration_date"></span>
+仮会員登録タイム：<span id="registration_time"></span>
+
+※メールが届かない場合は恐れ入りますが029-830-3200までお電話ください              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/DCMJS"></script>
+  <script src="/SPAJS"></script>
+</body>
+</html>
