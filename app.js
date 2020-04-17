@@ -95,10 +95,7 @@ let emailConfig = mailer.config({
   host: email_configuration_db_lines_Array[0],
   port: email_configuration_db_lines_Array[1],
   secure: email_configuration_db_lines_Array[2] == "true" ? true : false,
-  auth: {
-    user: email_configuration_db_lines_Array[3],
-    pass: email_configuration_db_lines_Array[4]
-  }
+  use_authentication: false, // 認証しない
 });
 const from_email = email_configuration_db_lines_Array[5];
 const subject = email_configuration_db_lines_Array[6];
