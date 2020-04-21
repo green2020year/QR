@@ -25,6 +25,8 @@ app.set('view engine', 'html');
 
 let ANKET_DATA_QUEUE = [
 ];
+// check QR_NO,mail_address,and execute mail_function
+let run = false;
 
 // ANKET DATA
 const holiday = ["月", "火", "水", "木", "金", "土", "日", "祝日", "全日"];
@@ -144,7 +146,25 @@ const ios_or_android = function(req) {
     //console.log("-------------------------");
     const osname = agent.os.name;
     const devicename = agent.device.model;
-
+    // mobile or tablet
+    const deviceType = agent.device.type;
+    if(osname == "iOS" && devicename == "iPhone") {
+      //iphone
+      resolve("Yes");
+    } else if(osname == "iOS" && devicename == "iPad") {
+      // ipad
+      reject(error_msg.only_smartphone_allowed_error);
+    } else if(osname == "Mac OS" && devicename == undefined) {
+      // new ipad
+      reject(error_msg.only_smartphone_allowed_error);
+    } else if(osname == "Android" && deviceType == "mobile") {
+      // All Android Mobile
+      resolve("Yes");
+    } else {
+      // 上の以外の場合は。
+      reject(error_msg.only_smartphone_allowed_error);
+    }
+    /*
     if(osname == "iOS" && devicename == "iPhone") {
       //iphone
       resolve("Yes");
@@ -166,7 +186,8 @@ const ios_or_android = function(req) {
     } else {
       // 上の以外の場合は。
       reject(error_msg.only_smartphone_allowed_error);
-    }    
+    }
+    */    
   });
   return p;
 }
@@ -482,6 +503,12 @@ app.post("/QR/ANKET-REGIST", async function(req, res) {
       }  
       ANKET_DATA_QUEUE.push(information);
 
+      // execute loop() function, if Queue is empty then automatically loop ends.no Cpu cycle
+      if(!run) {
+        run = true;
+        loop();
+      }
+
       //console.log(ANKET_DATA_QUEUE);
       //console.log("Queue length : " + ANKET_DATA_QUEUE.length);
     })
@@ -510,7 +537,7 @@ function setImmediatePromise() {
 }
 
 async function loop() {
-  while(true) {
+  while(run) {
     await setImmediatePromise();
     if(ANKET_DATA_QUEUE.length != 0) {
       let introducer_name = "";
@@ -573,7 +600,9 @@ async function loop() {
         //console.log("deleted queue length" + ANKET_DATA_QUEUE.length);
       });
       
+    } else {
+      run = false;
     }
   }
 }
-loop();
+//loop();
