@@ -582,7 +582,7 @@ async function loop() {
           emailTemplate
           .replace(/{EMPLOYEE_ID}/g, employee_id)
           .replace(/{REGISTRATION_DATE}/g, _date)
-          .replace(/{REGISTRATION_TIME}/g, _time)        
+          .replace(/{REGISTRATION_TIME}/g, _time);
           return await doMail(from_email, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address , subject , Modified_emailTemplate);
       })
       .then(function(successOrFailureMessage) {
