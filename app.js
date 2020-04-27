@@ -578,7 +578,12 @@ async function loop() {
           // append record to the database.
           appendRecordToDisk(anket_file_location, record);
           // sending mail
-          return await doMail(from_email, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address , subject , emailTemplate);
+          let Modified_emailTemplate = 
+          emailTemplate
+          .replace(/{EMPLOYEE_ID}/g, employee_id)
+          .replace(/{REGISTRATION_DATE}/g, _date)
+          .replace(/{REGISTRATION_TIME}/g, _time)        
+          return await doMail(from_email, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address , subject , Modified_emailTemplate);
       })
       .then(function(successOrFailureMessage) {
         ANKET_DATA_QUEUE[0].chkResults.userinfo.registration_date = _date;
