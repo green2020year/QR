@@ -58,6 +58,9 @@ const error_msg = {
 const anket_file_location  = "../db/anket_db.txt";
 const no_of_anket_users_file_location = "../db/no_of_anket_users.txt";
 const queue_threshold_file_location = "../db/queue_threshold.txt";
+const global_mail_address_file_location  = "../db/global_mail_address_db.txt";
+const employee_position_vs_qr_no_file_location  = "../db/employee_position_vs_qr_no.txt";
+const specific_qrno_file_location  = "../db/{QR_NO}_anket_db.txt";
 /*
 システム再起動するときに、すべてのファイル(*.JS,*.html)内容をメモリにロードします。
 */
@@ -392,8 +395,8 @@ const chkQueueLength = function() {
   return p;  
 }
 
-function chkEmailExists(anket_file_location, email, index) {
-  const lr = new LineByLineReader(anket_file_location);  
+function chkEmailExists(file_location, email, index) {
+  const lr = new LineByLineReader(file_location);  
   let found = false;
   let p = new Promise(function (resolve, reject) {
     lr.on('line', function (line) {
@@ -415,13 +418,13 @@ function chkEmailExists(anket_file_location, email, index) {
   return p;
 }
 
-function appendRecordToDisk(anket_file_location, record) {
-  const stats = fs.statSync(anket_file_location);
+function appendRecordToDisk(file_location, record) {
+  const stats = fs.statSync(file_location);
   const fileSizeInBytes = stats["size"];
   if(fileSizeInBytes != 0) {
-    fs.appendFileSync(anket_file_location, "\r\n");
+    fs.appendFileSync(file_location, "\r\n");
   }
-  fs.appendFileSync(anket_file_location, record);
+  fs.appendFileSync(file_location, record);
 }
 
 function writeDataToDisk(no_of_anket_users_file_location, employee_position) {
@@ -550,7 +553,7 @@ async function loop() {
       .then(async function(introducername) {
         introducer_name = introducername;
         // 6 = index of "mail_address" location in anket_db.txt
-        return await chkEmailExists(anket_file_location, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address, 6);
+        return await chkEmailExists(global_mail_address_file_location, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address, 0);
         //console.log(count.toString() + " Queue length: " + ANKET_DATA_QUEUE.length.toString());
         //ANKET_DATA_QUEUE[0].response.end(count.toString());
         // remove the first item from Array
@@ -559,6 +562,13 @@ async function loop() {
       .then(async function() {
         //console.log(ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA);
         employee_position++;
+
+        // append (new mail address) to "global_mail_address_file_location" File.
+        appendRecordToDisk(global_mail_address_file_location, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address);
+
+        // append (employee_position,QR_NO) to "employee_position_vs_qr_no_file_location" File
+        appendRecordToDisk(employee_position_vs_qr_no_file_location, employee_position + "," +  ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.QR_NO);
+        
         let p = ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.position != "" ?  ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.position : ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.position_others;
         //QR_NO関係なくアンケート答えてる人が何番ですか？（Position）、QR_NO、紹介者名、仮会員番号、仮会員登録日、仮会員タイム、chkResults.ANKET_DATA
         let record = 
@@ -577,6 +587,10 @@ async function loop() {
           ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.play_style;
           // append record to the database.
           appendRecordToDisk(anket_file_location, record);
+
+          // append record to the specific "specific_qrno_file_location".
+          appendRecordToDisk(specific_qrno_file_location.replace(/{QR_NO}/g, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.QR_NO), record);
+                    
           // sending mail
           let Modified_emailTemplate = 
           emailTemplate
