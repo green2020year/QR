@@ -247,7 +247,7 @@ var SPA = (function() {
     axios.post("/QR/ANKET-REGIST", ANKET_DATA).then(function(result) {
       var response = result.data;
       if(response.global_status == "OK") {
-        showScreen003(response.userinfo.registration_date, response.userinfo.registration_time);
+        showScreen003(response.userinfo.registration_date, response.userinfo.registration_time, response.userinfo.reservation_url);
       } else {
         document.querySelector("#screen002 #mail_address_container .error-msg").textContent = response.mail_address;
 
@@ -296,12 +296,12 @@ var SPA = (function() {
     document.querySelector("#screen002 .nav_footer.server-error").style.display = "none";    
   }
 
-  showScreen003 = function(registration_date, registration_time) {
+  showScreen003 = function(registration_date, registration_time, reservation_url) {
     document.querySelector("#screen002").style.display = "none";
     document.querySelector("#screen003").style.display = "block";
     document.querySelector("#screen003 #complete_container .card-content .white-space-pre #registration_date").textContent = registration_date;
     document.querySelector("#screen003 #complete_container .card-content .white-space-pre #registration_time").textContent = registration_time;
-
+    document.querySelector("#screen003 #complete_container .card-content .white-space-pre #reservation_url").innerHTML = '<a href="' + reservation_url + '" target="_blank">予約</a>'
   }
 
   dump_in_console_from_memory = function() {

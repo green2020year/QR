@@ -247,6 +247,7 @@ const inputDataAndDeviceCHK = async function(req) {
     "userinfo" : {
       "registration_date" : "",
       "registration_time" : "",
+      "reservation_url" : ""
     }
   };
 
@@ -547,7 +548,7 @@ async function loop() {
       let now = new Date();
       let _date = formatToTimeZone(now, FORMAT1, {timeZone: TIME_ZONE_TOKYO})
       let _time = formatToTimeZone(now, FORMAT2, {timeZone: TIME_ZONE_TOKYO})
-      let employee_id = uniqid.time("ANKET-");
+      let employee_id = uniqid.time("A-");
 
       await is_QR_NO_present(ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.QR_NO)
       .then(async function(introducername) {
@@ -602,6 +603,7 @@ async function loop() {
       .then(function(successOrFailureMessage) {
         ANKET_DATA_QUEUE[0].chkResults.userinfo.registration_date = _date;
         ANKET_DATA_QUEUE[0].chkResults.userinfo.registration_time = _time;
+        ANKET_DATA_QUEUE[0].chkResults.userinfo.reservation_url = "http://34.84.118.250:4000/r/" + employee_id;
         ANKET_DATA_QUEUE[0].response.json(ANKET_DATA_QUEUE[0].chkResults);
 
         // save employee_position to Disk
