@@ -100,7 +100,12 @@ let emailConfig = mailer.config({
   host: email_configuration_db_lines_Array[0],
   port: email_configuration_db_lines_Array[1],
   secure: email_configuration_db_lines_Array[2] == "true" ? true : false,
-  use_authentication: false, // 認証しない
+  use_authentication: false // 認証しない
+  /*
+  auth: {
+    user: email_configuration_db_lines_Array[3],
+    pass: email_configuration_db_lines_Array[4]
+  }*/  
 });
 const from_email = email_configuration_db_lines_Array[5];
 const subject = email_configuration_db_lines_Array[6];
@@ -597,7 +602,8 @@ async function loop() {
           emailTemplate
           .replace(/{EMPLOYEE_ID}/g, employee_id)
           .replace(/{REGISTRATION_DATE}/g, _date)
-          .replace(/{REGISTRATION_TIME}/g, _time);
+          .replace(/{REGISTRATION_TIME}/g, _time)
+          .replace(/{RESERVATION_URL}/g, '<a href="' + "http://34.84.118.250:4000/r/" + employee_id + '" target="_blank">予約</a>');
           return await doMail(from_email, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.mail_address , subject , Modified_emailTemplate);
       })
       .then(function(successOrFailureMessage) {
