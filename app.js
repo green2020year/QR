@@ -10,6 +10,7 @@ const mailer = require('nodemailer-promise');
 const LineByLineReader = require('line-by-line');
 const UglifyJS = require("uglify-js");
 const {formatToTimeZone} = require('date-fns-timezone');
+var Kuroshiro = require('kuroshiro');
 const FORMAT1 = 'YYYY/MM/DD';
 const FORMAT2 = 'HH:mm:ss';
 const TIME_ZONE_TOKYO = 'Asia/Tokyo';
@@ -37,6 +38,7 @@ const position = ["経営者","管理職","一般職","その他"];
 const play_style = ["男性のみ", "女性のみ", "男女問わず"];
 
 const error_msg = {
+  "hiragana_error" : "お名前はひらがなのみ許可",
   "email_error_msg001" : "メールアドレスを正しく入力してください",
   "email_error_msg002" : "スマートフォンのメールアドレスを入力してください",
   "holiday_error_msg001" : "休日をお選びください",
@@ -229,6 +231,7 @@ const inputDataAndDeviceCHK = async function(req) {
   let chkResults = {
     "global_status" : "",
     "device": "",
+    "name": "",
     "mail_address": "",
     "holiday": "",
     "score": "",
@@ -240,6 +243,7 @@ const inputDataAndDeviceCHK = async function(req) {
     "extra_error" : "",
     "ANKET_DATA" : {
       "QR_NO": "",
+      "name": "",
       "mail_address": "",
       "holiday": "",
       "score": "",
@@ -271,6 +275,31 @@ const inputDataAndDeviceCHK = async function(req) {
   // QR_NO
   const req_QR_NO = req.body.QR_NO.trim();
   chkResults.ANKET_DATA.QR_NO = req_QR_NO;
+
+  // name CHK
+  const req_name = req.body.name.trim();
+  chkResults.ANKET_DATA.name = req_name;
+
+  let hiragana = true;
+  let length = req_name.length;
+
+  for(let i=0; i<length; i++) {
+    if(!Kuroshiro.Util.isHiragana(req_name[i])) {
+      hiragana = false;
+      break;  
+    }
+  }
+
+  if(length == 0) {
+    hiragana = false;
+  }
+
+  if(hiragana) {
+    error_flag = false;
+  } else {
+    chkResults.name = error_msg.hiragana_error;
+    error_flag = true;
+  }
 
   // mail_address CHK
   const req_mail_address = req.body.mail_address.trim();
@@ -590,7 +619,8 @@ async function loop() {
           ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.play_time + "," + 
           ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.participation + "," + 
           p + "," + 
-          ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.play_style;
+          ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.play_style + "," + 
+          ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.name;
           // append record to the database.
           appendRecordToDisk(anket_file_location, record);
 
@@ -600,6 +630,7 @@ async function loop() {
           // sending mail
           let Modified_emailTemplate = 
           emailTemplate
+          .replace(/{NAME}/g, ANKET_DATA_QUEUE[0].chkResults.ANKET_DATA.name)
           .replace(/{EMPLOYEE_ID}/g, employee_id)
           .replace(/{REGISTRATION_DATE}/g, _date)
           .replace(/{REGISTRATION_TIME}/g, _time)

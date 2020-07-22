@@ -3,6 +3,7 @@ var SPA = (function() {
   //var　⇒　mail_address,holiday[],score,play_time[],participation,position,position_others,play_style
   var ANKET_DATA = {
     "QR_NO": "",
+    "name": "",
     "mail_address": "",
     "holiday": "",
     "score": "",
@@ -43,6 +44,7 @@ var SPA = (function() {
   }
   
   screen001_clear_error_messages = function() {
+    document.querySelector("#screen001 #name_container .error-msg").textContent = "";
     document.querySelector("#screen001 #mail_address_container .error-msg").textContent = "";
     document.querySelector("#screen001 #holiday_container .error-msg").textContent = "";
     document.querySelector("#screen001 #score_container .error-msg").textContent = "";
@@ -57,6 +59,11 @@ var SPA = (function() {
   screen001_btn01_action = function(event) {
     // remove all anket error messages
     screen001_clear_error_messages();
+
+    // clear name from memory & DOM
+    
+    ANKET_DATA.name = "";
+    document.querySelector("#screen001 #name_container input").value = "";
 
     // clear mail address from memory & DOM
     
@@ -113,6 +120,9 @@ var SPA = (function() {
     //var　⇒　mail_address,holiday[],score,play_time[],participation,position,play_style
     // QR_NO value
     ANKET_DATA.QR_NO = document.querySelector("#screen001 input[name='QR_NO']").value;
+
+    // name value
+    ANKET_DATA.name = document.querySelector("#screen001 #name_container input").value;
 
     // mail_address value
     ANKET_DATA.mail_address = document.querySelector("#screen001 #mail_address_container input").value;
@@ -174,6 +184,7 @@ var SPA = (function() {
         // show Screen002
         showScreen002AndRegisterEvents();
       } else {
+        document.querySelector("#screen001 #name_container .error-msg").textContent = response.name;
         document.querySelector("#screen001 #mail_address_container .error-msg").textContent = response.mail_address;
         document.querySelector("#screen001 #holiday_container .error-msg").textContent = response.holiday;
         document.querySelector("#screen001 #score_container .error-msg").textContent = response.score;
@@ -209,7 +220,9 @@ var SPA = (function() {
     document.querySelector("#screen002 #mail_address_container .error-msg").textContent = "";
     document.querySelector("#screen002 .nav_footer.server-error").style.display = "none";
 
-    //var　⇒　mail_address,holiday[],score,play_time[],participation,position,play_style
+    //var　⇒　name,mail_address,holiday[],score,play_time[],participation,position,play_style
+    // show mail_address
+    document.querySelector("#screen002 #name_container .card-content div").textContent = ANKET_DATA.name;
     // show mail_address
     document.querySelector("#screen002 #mail_address_container .card-content div").textContent = ANKET_DATA.mail_address;
     // show holiday
